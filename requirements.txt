@@ -1,0 +1,14 @@
+absl==0.0
+absl_py==0.13.0
+h5py==2.10.0
+hok==1.2.1
+libtmux==0.22.1
+loguru==0.7.0
+matplotlib==3.7.1
+numpy==1.19.5
+pandas==2.0.2
+psutil==5.9.5
+pynvml==11.5.0
+pyzmq==25.1.0
+seaborn==0.12.2
+torch==1.10.2

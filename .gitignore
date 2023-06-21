@@ -1,0 +1,12 @@
+.vscode
+.idea
+__pycache__
+logs/
+offline_logs/
+tensorboard_logs/
+datasets/
+baselines/
+log/
+GameAiMgr*
+
+

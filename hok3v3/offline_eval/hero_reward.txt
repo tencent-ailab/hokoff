@@ -1,0 +1,53 @@
+<hero_place2cid>
+    top:128;
+    jun:107,117,193;
+    mid:141,152,190;
+    adc:173,132,111;
+    sup:112;
+</hero_place2cid>
+
+<hero_adc_reward>
+    hero_place:adc;
+    money:0.005;
+    hp_rate_sqrt_sqrt:3;
+    total_hurt_to_hero:0.3;
+    tower:1;
+    tower_crystal:1;
+    killCnt:1;
+    assistCnt:1;
+</hero_adc_reward>
+
+<hero_mid_reward>
+    hero_place:mid;
+    money:0.005;
+    hp_rate_sqrt_sqrt:3;
+    total_hurt_to_hero:0.3;
+    tower:1;
+    tower_crystal:1;
+    killCnt:1;
+    assistCnt:1;
+</hero_mid_reward>
+
+<hero_top_reward>
+    hero_place:top;
+    money:0.005;
+    atk_monster:0.02;
+    hp_rate_sqrt_sqrt:3;
+    total_hurt_to_hero:0.3;
+    tower:1;
+    tower_crystal:1;
+    killCnt:1;
+    assistCnt:1;
+</hero_top_reward>
+
+<hero_jun_reward>
+    hero_place:jun;
+    money:0.005;
+    atk_monster:0.02;
+    hp_rate_sqrt_sqrt:3;
+    total_hurt_to_hero:0.3;
+    tower:1;
+    tower_crystal:1;
+    killCnt:1;
+    assistCnt:1;
+</hero_jun_reward>
