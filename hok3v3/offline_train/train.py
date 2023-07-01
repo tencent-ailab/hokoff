@@ -9,8 +9,8 @@ import torch as th
 import random
 
 parser = argparse.ArgumentParser(description='Offline 3v3 Train')
-parser.add_argument("--root_path", type=str, default="/hok-offline/hok3v3/offline_logs", help="The root path of the offline information.")
-parser.add_argument("--replay_dir", type=str, default="/hok-offline/hok3v3/datasets/3v3version1/", help="The root path of the datasets.")
+parser.add_argument("--root_path", type=str, default=os.path.join(os.path.dirname(os.path.dirname(__file__)),"offline_logs"), help="The root path of the offline information.")
+parser.add_argument("--replay_dir", type=str, default=os.path.join(os.path.dirname(os.path.dirname(__file__)),"/datasets/3v3version1/"), help="The root path of the datasets.")
 parser.add_argument("--dataset_name", type=str, default="norm_medium", help="dataset name.")
 parser.add_argument("--run_prefix", type=str, default="run_indbc_0", help="The run prefix of the offline exp.")
 parser.add_argument("--levels", type=str, default="0", help="The levels of the opponents.")

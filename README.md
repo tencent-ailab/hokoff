@@ -9,9 +9,11 @@ Here is the open-access code for our paper "HoK Offline: Investigating Solo and 
 ## **Installation**
 
 ### **HoK Env**
+
 Our framework is based on Honor of Kings environment, please install the [**hok environment and the gamecore**](https://github.com/tencent-ailab/hok_env) first.
 
 ### **Multi-Level Models**
+
 The Multi-Level Models we presented in the paper can be download from the following link: [**for HoK Arena(1v1)**](https://kaiwu-assets-1258344700.cos.ap-shanghai.myqcloud.com/paper/hok-offline/1v1/1v1baselines.zip) and [**for HoK MA2(3v3)**](https://kaiwu-assets-1258344700.cos.ap-shanghai.myqcloud.com/paper/hok-offline/3v3/3v3baselines.zip). Please download these models and unzip them into folder **hok1v1** and folder **hok3v3** respectively. Here is the code example:
 
     # download multi-level models for HoK Arena
@@ -29,6 +31,7 @@ The Multi-Level Models we presented in the paper can be download from the follow
     mv 3v3baselines baselines
 
 ### **Requirements**
+
 The python version we use is Python 3.7.13
 
 Please install other requirements by:
@@ -38,7 +41,7 @@ Please install other requirements by:
 ## **Sample**
 
     cd hok3v3
-    sh offline_sample/scripts/start_sample.sh <levels_str> <eval_num> <cpu_num> <datasets_repo_name> <backend> <dataset_name>
+    sh offline_sample/scripts/start_sample.sh <levels_str> <eval_num> <cpu_num> <datasets_repo_name>`<backend>` <dataset_name>
     #e.g.
     sh offline_sample/scripts/start_sample.sh 1,1 20 50 3v3version1 tensorflow norm_medium
 
@@ -60,14 +63,14 @@ Please refer to 'start_sample.sh' and 'sample.sh' for details.
 2. During parallel sampling, some of the sampling processes may fail for various gamecore reasons. Apart from checking the log files in "offline_sample/logs", you can use the "tools/remove_and_rename.py" tool to verify if the collected data files are readable and complete.
 
 ## **Train**
+
     cd hok-offline/hok3v3
-    python offline_train/train.py --root_path=offline_logs --replay_dir=datasets --dataset_name=norm_medium --run_prefix=run_indbc_0 
+    python offline_train/train.py --root_path=offline_logs --replay_dir=datasets --dataset_name=norm_medium --run_prefix=run_indbc_0
 
 **Notations:**
 
-1. The models and train_logs and tensorboard files will be saved into the directory 'hok-offline/hok3v3/offline_logs/run_indbc_0' which follows the format "<root_path>/<run_prefix>"
+1. The models and train_logs and tensorboard files will be saved into the directory 'hokoff/hok3v3/offline_logs/run_indbc_0' which follows the format "<root_path>/<run_prefix>"
 2. The format for the run_prefix is 'run_<algorithm_name>_<experiment_id>'. Please adhere to this format unless you are modifying the code for your own purposes.
-
 
 ## **Evaluate**
 
@@ -75,14 +78,11 @@ Please refer to 'start_sample.sh' and 'sample.sh' for details.
     python offline_eval/evaluation.py --root_path=offline_logs --run_prefix=run_indbc_0 --levels=1 --cpu_num=10 --eval_num=2 --final_test=0 --tensorflow_oppo=1 --max_steps=500000 --dataset_name=norm_medium
 
 **Notations:**
+
 1. We initially included the evaluation process in the training module in the form of a subprocess. However, we discovered that it resulted in reduced training efficiency. Thus, we decided to separate the evaluation process into a standalone module.
-
-2. The <root_path> and <run_prefix> have the same meaning as in training module. 
-
-3. The <levels> represents the level of the opponents for evaluation and <tensorflow_oppo> represents the opponents load tensorflow pretrained models if =1 else pytorch.
-
+2. The <root_path> and <run_prefix> have the same meaning as in training module.
+3. The `<levels>` represents the level of the opponents for evaluation and <tensorflow_oppo> represents the opponents load tensorflow pretrained models if =1 else pytorch.
 4. <cpu_num> and <eval_num> have the same meaning as in sampling module and the total number of evaluation trajectories is **cpu_num*eval_num**.
-
 5. <final_test>: A value of 1 means that only the last three models will be evaluated, and their average performance will be recorded into 'offline_logs/final_win_rate.xlsx' as final performance. A value of 0 indicates that the system will continuously monitor the model pool and evaluate the latest model whenever a new model is added, until <max_steps> is reached.
 
 ## **Acknowledgement**
