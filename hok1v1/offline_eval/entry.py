@@ -46,7 +46,7 @@ import torch as th
 
 #  gamecore as lib
 def gc_as_lib(argv):
-    from hok import HoK1v1
+    from hok.hok1v1 import HoK1v1
 
     thread_id = 0
     actor_id = FLAGS.thread_num * FLAGS.i + thread_id

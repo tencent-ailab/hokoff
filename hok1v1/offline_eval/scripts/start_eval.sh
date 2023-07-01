@@ -99,21 +99,21 @@ start_time=` date  +%s`
 # Code testing
 cd $ROOT_DIR;
 echo "Total actor num:$CPU_NUMBER"
-let cnt=$CPU_NUMBER-1
-while [ $[` date  +%s` - $start_time] -lt $Max_test_time ]
+cnt=$(($CPU_NUMBER-1))
+while [ $(( $(date +%s) - start_time )) -lt $Max_test_time ]
 do  
     done_cpu=0
     
     for i in $(seq 0 $cnt); do
         echo '!!!!'
         echo grep -c "close ip" $LOG_DIR/actor_$i.log
-        if [[ ` grep -c "close ip" $LOG_DIR/actor_$i.log ` == 2 ]]
+        if [ $(grep -c "close ip" "$LOG_DIR/actor_$i.log") = 2 ]
         then
-            let done_cpu=$done_cpu+1
+            done_cpu=$(($done_cpu+1))
         fi
     done;
     echo "Current done actor num: $done_cpu"
-    if [[ "$done_cpu" == "$CPU_NUMBER" ]]
+    if [ "$done_cpu" = "$CPU_NUMBER" ]
     then
         echo "All actors are done."
         break

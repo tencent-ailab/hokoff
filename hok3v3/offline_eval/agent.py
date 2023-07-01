@@ -3,7 +3,7 @@ import random
 
 from eval_framework.predictor.utils import cvt_tensor_to_infer_input, cvt_tensor_to_infer_output
 
-from hok.gamecore.kinghonour.frame_state_convert import convert_frame_state_pb, Object
+# from hok.gamecore.kinghonour.frame_state_convert import convert_frame_state_pb, Object
 from eval_framework.common_func import log_time
 
 # from train_eval_config.hok_config import Config
@@ -18,19 +18,19 @@ _g_model_update_ratio = 0.8
 # LOG = CommonLogger.get_logger()
 
 
-def z_axis_symmetric(obj):
-    if not isinstance(obj, Object):
-        return
+# def z_axis_symmetric(obj):
+#     if not isinstance(obj, Object):
+#         return
 
-    for k, v in obj.__dict__.items():
-        if isinstance(v, list):
-            for i in v:
-                z_axis_symmetric(i)
-        else:
-            z_axis_symmetric(v)
+#     for k, v in obj.__dict__.items():
+#         if isinstance(v, list):
+#             for i in v:
+#                 z_axis_symmetric(i)
+#         else:
+#             z_axis_symmetric(v)
 
-        if k == "x":
-            obj.x = -obj.x
+#         if k == "x":
+#             obj.x = -obj.x
 
 
 def cvt_infer_list_to_numpy_list(infer_list):
@@ -163,29 +163,26 @@ class Agent:
             return False
 
     @log_time("aiprocess_process")
-    def predict_process(self, state_dict, req_pb):
+    def predict_process(self, features, frame_state):
         hero_data_list = []
         runtime_ids = []
-        for hero_idx in range(len(state_dict)):
-            feature = state_dict[hero_idx]["feature"]
-            hero_data_list.append(feature)
-            runtime_ids.append(state_dict[hero_idx]["hero_runtime_id"])
+        for hero_idx in range(len(features)):
+            runtime_ids.append(features[hero_idx].model_info.hero_runtime_id)
 
-        frame_state = convert_frame_state_pb(req_pb.frame_state)
         if self.backend == "tensorflow":
-            pred_ret, lstm_info = self._predict_process(hero_data_list, frame_state, runtime_ids)
+            pred_ret, lstm_info = self._predict_process(features, frame_state, runtime_ids)
         else:
-            pred_ret, lstm_info = self._predict_process_torch(hero_data_list, frame_state, runtime_ids)
+            pred_ret, lstm_info = self._predict_process_torch(features, frame_state, runtime_ids)
 
         return pred_ret, lstm_info
 
-    def _predict_process(self, hero_data_list, frame_state, runtime_ids):
+    def _predict_process(self, features, frame_state, runtime_ids):
         # TODO: add a switch for controlling sample strategy.
         # put data to input
         input_list = cvt_tensor_to_infer_input(self.model.get_input_tensors())
-        input_list[0].set_data(np.array(hero_data_list[0]))
-        input_list[1].set_data(np.array(hero_data_list[1]))
-        input_list[2].set_data(np.array(hero_data_list[2]))
+        input_list[0].set_data(np.array(features[0].feature))
+        input_list[1].set_data(np.array(features[1].feature))
+        input_list[2].set_data(np.array(features[2].feature))
         input_list[3].set_data(self.lstm_cell)
         input_list[4].set_data(self.lstm_hidden)
 
@@ -203,13 +200,13 @@ class Agent:
 
         return prob, lstm_info
 
-    def _predict_process_torch(self, hero_data_list, frame_state, runtime_ids):
+    def _predict_process_torch(self, features, frame_state, runtime_ids):
         # TODO: add a switch for controlling sample strategy.
         # put data to input
         input_list = []
-        input_list.append(np.array(hero_data_list[0]))
-        input_list.append(np.array(hero_data_list[1]))
-        input_list.append(np.array(hero_data_list[2]))
+        input_list.append(np.array(features[0].feature))
+        input_list.append(np.array(features[1].feature))
+        input_list.append(np.array(features[2].feature))
         input_list.append(self.lstm_cell)
         input_list.append(self.lstm_hidden)
 

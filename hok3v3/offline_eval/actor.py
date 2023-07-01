@@ -124,73 +124,72 @@ class Actor:
             if is_gameover:
                 break
             # while True:
-            samples = []
-            is_send = 0
-            if not is_gameover:
-                reward_camp = [[], []]
-                all_hero_reward_camp = [[], []]
+            # if not is_gameover:
+            reward_camp = [[], []]
+            all_hero_reward_camp = [[], []]
 
-                for i, agent in enumerate(self.env_agents):
-                    if agent.is_common_ai():
-                        LOG.info("agent %d is common_ai" % i)
-                        continue
-                    pro_type, state_dict_list, req_pb = self.env.step_feature(i)
-                    if first_time:
+            for i, agent in enumerate(self.env_agents):
+                if agent.is_common_ai():
+                    LOG.info("agent %d is common_ai" % i)
+                    continue
+                pro_type, features, req_pb = self.env.step_feature(i)
+                if first_time:
+                    first_frame_no = req_pb.frame_no
+                    while first_frame_no > 100:  ##qy hard
+                        self.env.close_game()
+                        self.env.reset(self.env_agents, eval_mode=eval)
+                        pro_type, features, req_pb = self.env.step_feature(i)
                         first_frame_no = req_pb.frame_no
-                        while first_frame_no > 100:  ##qy hard
-                            self.env.close_game()
-                            self.env.reset(self.env_agents, eval_mode=eval)
-                            pro_type, state_dict_list, req_pb = self.env.step_feature(i)
-                            first_frame_no = req_pb.frame_no
 
-                    # print("frame_no: %d" %(req_pb.frame_no))
-                    if pro_type == 0:
-                        continue
-                    if self.sub_task == 'gain_gold' and req_pb.frame_no >= sub_task_gameover_frameno:
-                        req_pb.gameover = True
-                    if first_time:
-                        first_frame_no = req_pb.frame_no
-                        LOG.info("first_frame_no %d" % first_frame_no)
-                        if i == 1:
-                            first_time = False
-                    else:
-                        if agent.save_h5_sample:
-                            feature = {'reward_s': [state_dict_list[jj]['reward'] for jj in range(3)], 'done': req_pb.gameover}
-                            if self.sub_task == 'gain_gold' and not agent.keep_latest:
-                                feature = {
-                                    'reward_s': [state_dict_list[jj]["all_hero_reward_info"][jj]['money'] for jj in range(3)],
-                                    'done': req_pb.gameover,
-                                }
-                            agent._sample_process_for_saver_sp(feature)
-
-                    for hero_idx in range(self.hero_num):
-                        reward_camp[i].append(state_dict_list[hero_idx]["reward"])
-                        all_hero_reward_camp[i].append(state_dict_list[hero_idx]["all_hero_reward_info"])
-                        # LOG.error(str(state_dict_list[hero_idx]['all_hero_reward_info']))
-
-                    if not req_pb.gameover:
-                        if isinstance(self.agents[i], list):
-                            prob_list = []
-                            for j, sub_agent in enumerate(self.agents[i]):
-                                prob, lstm_info = sub_agent.predict_process(state_dict_list, req_pb)
-                                prob_list.append(prob)
-                            ind = np.random.randint(0, 3)
-                            prob_list[0][ind] = prob_list[1][ind]
-                            prob = prob_list[0]
-                        else:
-                            prob, lstm_info = agent.predict_process(state_dict_list, req_pb)
+                # print("frame_no: %d" %(req_pb.frame_no))
+                if pro_type == 0:
+                    continue
+                if self.sub_task == 'gain_gold' and req_pb.frame_no >= sub_task_gameover_frameno:
+                    req_pb.gameover = True
+                if first_time:
+                    first_frame_no = req_pb.frame_no
+                    LOG.info("first_frame_no %d" % first_frame_no)
+                    if i == 1:
+                        first_time = False
+                else:
+                    if agent.save_h5_sample:
+                        feature = {'reward_s': [features[jj].reward for jj in range(3)], 'done': req_pb.gameover}
                         if self.sub_task == 'gain_gold' and not agent.keep_latest:
-                            mask = np.zeros_like(prob[0])
-                            mask[0] = 1
-                            prob = [mask] * 3
+                            feature = {
+                                'reward_s': [(features[jj].all_hero_reward_info)[jj]['money'] for jj in range(3)],
+                                'done': req_pb.gameover,
+                            }
+                        agent._sample_process_for_saver_sp(feature)
 
-                        samples, state_dict_list = self.env.step_action([prob], [state_dict_list], req_pb, i, lstm_info)
-                        if agent.save_h5_sample:
-                            agent._sample_process_for_saver(samples[0])
-                        # print('!!!!!!!!!!!',samples)
+                for hero_idx in range(self.hero_num):
+                    reward_camp[i].append(features[hero_idx].reward)
+                    all_hero_reward_camp[i].append(
+                        features[hero_idx].all_hero_reward_info
+                    )
+                sample = {}
+                if not req_pb.gameover:
+                    if isinstance(self.agents[i], list):
+                        prob_list = []
+                        for j, sub_agent in enumerate(self.agents[i]):
+                            prob, lstm_info = sub_agent.predict_process(features, req_pb)
+                            prob_list.append(prob)
+                        ind = np.random.randint(0, 3)
+                        prob_list[0][ind] = prob_list[1][ind]
+                        prob = prob_list[0]
                     else:
-                        # pro_type, state_dict_list, req_pb = self.env.step_feature(i)
-                        self.env._gameover(i, True)
+                        prob, lstm_info = agent.predict_process(features, req_pb)
+                    if self.sub_task == 'gain_gold' and not agent.keep_latest:
+                        mask = np.zeros_like(prob[0])
+                        mask[0] = 1
+                        prob = [mask] * 3
+
+                    sample = self.env.step_action(prob, features, req_pb, i, lstm_info)
+                    if agent.save_h5_sample:
+                        agent._sample_process_for_saver(sample)
+                    # print('!!!!!!!!!!!',samples)
+                else:
+                    # pro_type, state_dict_list, req_pb = self.env.step_feature(i)
+                    self.env._gameover(i, True)
 
             if req_pb.gameover:
                 is_gameover = True
@@ -202,18 +201,23 @@ class Actor:
             #     LOG.info("req_pb.gameover frame_no: %d" % (req_pb.frame_no))
         log_time_func("one_frame", end=True)
         print('game close!!!!!!!!!!!')
-        self.env.close_game()
+        self.env.close_game(self.agents)
         print('game close!!!!!!!!!!!')
 
         game_info["length"] = req_pb.frame_no
         loss_camp = -1
 
         # update camp information.
-        for npc_state in req_pb.frame_state.npc_states:
-            if npc_state.actor_type == 2 and npc_state.sub_type == 24 and npc_state.hp <= 0:
-                loss_camp = npc_state.camp
-            if npc_state.actor_type == 2 and npc_state.sub_type in [21, 24]:
-                LOG.info("Tower {} in camp {}, hp: {}".format(npc_state.sub_type, npc_state.camp, npc_state.hp))
+        for organ in req_pb.organ_list:
+            if organ.type == 24 and organ.hp <= 0:
+                loss_camp = organ.camp
+
+            if organ.type in [21, 24]:
+                LOG.info(
+                    "Tower {} in camp {}, hp: {}".format(
+                        organ.type, organ.camp, organ.hp
+                    )
+                )
 
         for i, agent in enumerate(self.env_agents):
             agent_camp = i + 1
@@ -229,14 +233,14 @@ class Actor:
                 LOG.info("camp%d_agent:%d win:%d" % (agent_camp, i, agent_win))
 
             LOG.info("---------- camp%d hero_info ----------" % agent_camp)
-            for hero_state in req_pb.frame_state.hero_states:
-                if agent_camp != hero_state.actor_state.camp:
+            for hero_state in req_pb.hero_list:
+                if agent_camp != hero_state.camp:
                     continue
 
                 LOG.info(
                     "hero:%d moneyCnt:%d killCnt:%d deadCnt:%d assistCnt:%d"
                     % (
-                        hero_state.actor_state.config_id,
+                        hero_state.config_id,
                         hero_state.moneyCnt,
                         hero_state.killCnt,
                         hero_state.deadCnt,
@@ -263,16 +267,20 @@ class Actor:
                 agent_win = 1
 
             hero_idx = 0
-            for hero_state in req_pb.frame_state.hero_states:
-                if agent_camp == hero_state.actor_state.camp:
+            for hero_state in req_pb.hero_list:
+                if agent_camp == hero_state.camp:
                     hero_idx += 1
                     money_per_frame += hero_state.moneyCnt / game_info["length"]
                     kill += hero_state.killCnt
                     death += hero_state.deadCnt
                     assistCnt += hero_state.assistCnt
                     hurt_per_frame += hero_state.totalHurt / game_info["length"]
-                    hurtH_per_frame += hero_state.totalHurtToHero / game_info["length"]
-                    hurtBH_per_frame += hero_state.totalBeHurtByHero / game_info["length"]
+                    hurtH_per_frame += (
+                        hero_state.totalHurtToHero / game_info["length"]
+                    )
+                    hurtBH_per_frame += (
+                        hero_state.totalBeHurtByHero / game_info["length"]
+                    )
 
             game_info["money_per_frame"] = money_per_frame / hero_idx
             game_info["kill"] = kill / hero_idx

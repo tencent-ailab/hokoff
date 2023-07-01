@@ -55,11 +55,11 @@ do
             actor_cnt=`ps -elf | grep "python offline_sample/sample_entry.py --actor_id=$actor_id " | grep -v grep | wc -l`
             echo "[`date`] actor_id:$actor_id actor_cnt:$actor_cnt"
             if [ $actor_cnt -lt 1 ]; then
-                actor_log=/dev/null
-                if [ -n "$KAIWU_DEV" ]; then
-                    actor_log=$LOG_DIR/actor_$i.log
+                # actor_log=/dev/null
+                # if [ -n "$KAIWU_DEV" ]; then
+                actor_log=$LOG_DIR/actor_$i.log
                     # rm $actor_log
-                fi
+                # fi
                 break
             else actor_id=$(($actor_id+10000))
             fi
@@ -80,9 +80,9 @@ do
     #   fi
   done; # for
 
-  if [ -n "$KAIWU_DEV" ]; then
-      break
-  fi
+#   if [ -n "$KAIWU_DEV" ]; then
+  break
+#   fi
 
   sleep 30
 

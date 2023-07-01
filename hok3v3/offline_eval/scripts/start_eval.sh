@@ -3,7 +3,7 @@
 ROOT_DIR=$(dirname $(dirname $(dirname $(readlink -f $0))))
 SCRIPT_DIR=$ROOT_DIR/offline_eval
 
-ln -sf $SCRIPT_DIR/hero_reward.txt /.hok_env/hok/AILab/ai_config/5v5/reward/hero_reward.txt
+# ln -sf $SCRIPT_DIR/hero_reward.txt /.hok_env/hok/AILab/ai_config/5v5/reward/hero_reward.txt
 unset USE_ZMQ_CURVE
 
 
@@ -94,18 +94,18 @@ start_time=` date  +%s`
 # Code testing
 cd $ROOT_DIR/offline_eval/logs;
 echo "Total actor num:$CPU_NUMBER"
-let cnt=$CPU_NUMBER-1
-while [ $[` date  +%s` - $start_time] -lt $Max_test_time ]
+cnt=$(($CPU_NUMBER-1))
+while [ $(( $(date +%s) - start_time )) -lt $Max_test_time ]
 do  
     done_cpu=0
     for i in $(seq 0 $cnt); do
-        if [[ ` grep -c "close ip" $LOG_DIR/actor_$i.log ` == 2 ]]
+        if [ $(grep -c "close ip" "$LOG_DIR/actor_$i.log") = 2 ]
         then
-            let done_cpu=$done_cpu+1
+            done = $(($done_cpu+1))
         fi
     done;
     echo "Current done actor num: $done_cpu"
-    if [[ "$done_cpu" == "$CPU_NUMBER" ]]
+    if [ "$done_cpu" = "$CPU_NUMBER" ]
     then
         echo "All actors are done."
         # cd /code/scripts; bash stop_dev.sh
