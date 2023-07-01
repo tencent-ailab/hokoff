@@ -19,12 +19,14 @@ The Multi-Level Models we presented in the paper can be download from the follow
     wget https://kaiwu-assets-1258344700.cos.ap-shanghai.myqcloud.com/paper/hok-offline/1v1/1v1baselines.zip
     unzip 1v1baselines.zip
     rm 1v1baselines.zip
+    mv 1v1baselines baselines
 
     # download multi-level models for HoK MA2
     cd hok3v3
     wget https://kaiwu-assets-1258344700.cos.ap-shanghai.myqcloud.com/paper/hok-offline/3v3/3v3baselines.zip
     unzip 3v3baselines.zip
     rm 3v3baselines.zip
+    mv 3v3baselines baselines
 
 ### **Requirements**
 The python version we use is Python 3.7.13
