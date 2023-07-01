@@ -3,6 +3,11 @@ import os
 import uuid
 import hashlib
 import tensorflow as tf
+# if tf.__version__.startswith('2'):
+#     import tensorflow.compat.v1 as tf
+#     tf.disable_v2_behavior()
+# else:
+#     import tensorflow as tf
 import logging
 
 from eval_framework.predictor.predictor.infer_input_output import InferInput, InferOutput

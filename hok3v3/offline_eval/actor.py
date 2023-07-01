@@ -136,7 +136,7 @@ class Actor:
                 if first_time:
                     first_frame_no = req_pb.frame_no
                     while first_frame_no > 100:  ##qy hard
-                        self.env.close_game()
+                        self.env.close_game(self.agents)
                         self.env.reset(self.env_agents, eval_mode=eval)
                         pro_type, features, req_pb = self.env.step_feature(i)
                         first_frame_no = req_pb.frame_no
@@ -416,7 +416,7 @@ class Actor:
                 # print(e.__traceback__.tb_frame.f_globals["__file__"])
                 # print(e.__traceback__.tb_lineno)
                 repeat_num -= 1
-                self.env.close_game()
+                self.env.close_game(self.agents)
                 if repeat_num == 0:
                     raise e
 

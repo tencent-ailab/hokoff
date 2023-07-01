@@ -1,6 +1,14 @@
 # __author__ = "yannickyu"
-
 import tensorflow as tf
+# if tf.__version__.startswith('2'):
+# print('tensorflow 2.X')
+# import tensorflow.compat.v1 as tf
+# tf.disable_v2_behavior()
+# else:
+    # import tensorflow as tf
+
+
+# 在这里可以使用 TensorFlow 库的功能
 
 # import glob
 import numpy as np

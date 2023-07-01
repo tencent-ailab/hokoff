@@ -15,6 +15,11 @@ from baselinemodel.model import Model as BaselineModel
 from config.config import Config
 from utils.ensure_path_exist import ensure_path_exist
 from utils.log_win_rate import log_win_rate
+from hok.hok1v1.camp import camp_iterator
+import hok.hok1v1.lib.interface as interface
+from hok.hok1v1.battle import Battle
+from hok.hok1v1 import HoK1v1
+from hok.hok1v1.env1v1 import interface_default_config
 
 FLAGS = flags.FLAGS
 
@@ -39,13 +44,37 @@ flags.DEFINE_string("offline_log_path", "/code/offline_logs", "log path for offl
 flags.DEFINE_string("run_prefix", "run_indbc_0", "log path for offline information")
 flags.DEFINE_string("dataset_name", 'level-0-0', "dataset name")
 
+flags.DEFINE_string(
+    "config_path",
+    os.getenv("INTERFACE_CONFIG_PATH", interface_default_config),
+    "config file for interface",
+)
+
+flags.DEFINE_integer(
+    "gamecore_req_timeout",
+    30000,
+    "millisecond timeout for gamecore to wait reply from server",
+)
+
+flags.DEFINE_string(
+    "gc_server_addr",
+    os.getenv("GAMECORE_SERVER_ADDR", "127.0.0.1"),
+    "the gamecore server addr",
+)
+
+flags.DEFINE_string(
+    "aiserver_ip",
+    os.getenv("AI_SERVER_ADDR", "127.0.0.1"),
+    "the actor ip",
+)
+
 MAP_SIZE = 100
 AGENT_NUM = 2
 import torch as th
 
 #  gamecore as lib
 def gc_as_lib(argv):
-    from hok.hok1v1 import HoK1v1
+    # from hok.hok1v1 import HoK1v1
 
     thread_id = 0
     actor_id = FLAGS.thread_num * FLAGS.i + thread_id
@@ -86,8 +115,13 @@ def gc_as_lib(argv):
     gc_mode = os.getenv("GC_MODE")
     if gc_mode == "local":
         remote_param = None
-    env = HoK1v1.load_game(
-        runtime_id=seed,
+    
+    game_launcher = Battle(
+        server_addr=FLAGS.gc_server_addr,
+        gamecore_req_timeout=FLAGS.gamecore_req_timeout,
+    )
+    env = HoK1v1(
+        "actor-1v1-{}".format(actor_id),
         gamecore_path=FLAGS.gamecore_path,
         game_log_path=FLAGS.game_log_path,
         eval_mode=False,
