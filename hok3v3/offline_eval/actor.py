@@ -182,14 +182,14 @@ class Actor:
                         mask = np.zeros_like(prob[0])
                         mask[0] = 1
                         prob = [mask] * 3
-
                     sample = self.env.step_action(prob, features, req_pb, i, lstm_info)
                     if agent.save_h5_sample:
                         agent._sample_process_for_saver(sample)
                     # print('!!!!!!!!!!!',samples)
                 else:
+                    self.env._gameover(i)
                     # pro_type, state_dict_list, req_pb = self.env.step_feature(i)
-                    self.env._gameover(i, True)
+                    # self.env._gameover(i, True)
 
             if req_pb.gameover:
                 is_gameover = True
@@ -222,7 +222,7 @@ class Actor:
         for i, agent in enumerate(self.env_agents):
             agent_camp = i + 1
             agent_win = 0
-            if (loss_camp > 0) and (agent_camp != loss_camp):
+            if (loss_camp is not None) and (agent_camp != loss_camp):
                 agent_win = 1
             if eval:
                 agent_model = load_models[i]
@@ -263,7 +263,7 @@ class Actor:
 
             agent_camp = i + 1
             agent_win = 0
-            if (loss_camp > 0) and (agent_camp != loss_camp):
+            if (loss_camp is not None) and (agent_camp != loss_camp):
                 agent_win = 1
 
             hero_idx = 0

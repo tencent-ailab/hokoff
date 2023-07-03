@@ -101,7 +101,7 @@ do
     for i in $(seq 0 $cnt); do
         if [ $(grep -c "close ip" "$LOG_DIR/actor_$i.log") = 2 ]
         then
-            done = $(($done_cpu+1))
+            done_cpu=$(($done_cpu+1))
         fi
     done;
     echo "Current done actor num: $done_cpu"
