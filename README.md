@@ -12,6 +12,13 @@ Here is the open-access code for our paper "HoK Offline: Investigating Solo and 
 
 Our framework is based on Honor of Kings environment, please install the [**hok environment and the gamecore**](https://github.com/tencent-ailab/hok_env) first.
 
+For running on Linux, based on the introductions in **docs/run_windows_gamecore_on_linux.md**, you can make a gamecore docker image. Then by running the following example commands, you can start a gamecore server container for hok1v1 or hok3v3.
+
+    # hok1v1 gamecore server container
+    docker run --name gamecore1v1 -d --network host --restart=always -e SIMULATOR_USE_WINE=1 -e GAMECORE_SERVER_BIND_ADDR=":23333" gamecore:latest bash -c "bash /rl_framework/remote-gc-server/run_and_monitor_gamecore_server.sh"
+    # hok3v3 gamecore server container
+    docker run --name gamecore3v3 -d --network host --restart=always -e SIMULATOR_USE_WINE=1 -e GAMECORE_SERVER_BIND_ADDR=":23432" gamecore:latest bash -c "bash /rl_framework/remote-gc-server/run_and_monitor_gamecore_server.sh"
+
 ### **Multi-Level Models**
 
 The Multi-Level Models we presented in the paper can be download from the following link: [**for HoK Arena(1v1)**](https://kaiwu-assets-1258344700.cos.ap-shanghai.myqcloud.com/paper/hok-offline/1v1/1v1baselines.zip) and [**for HoK MA2(3v3)**](https://kaiwu-assets-1258344700.cos.ap-shanghai.myqcloud.com/paper/hok-offline/3v3/3v3baselines.zip). Please download these models and unzip them into folder **hok1v1** and folder **hok3v3** respectively. Here is the code example:
