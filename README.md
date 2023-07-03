@@ -43,7 +43,7 @@ Please install other requirements by:
     cd hok3v3
     sh offline_sample/scripts/start_sample.sh <levels_str> <eval_num> <cpu_num> <datasets_repo_name>`<backend>` <dataset_name>
     #e.g.
-    sh offline_sample/scripts/start_sample.sh 1,1 20 50 3v3version1 tensorflow norm_medium
+    bash offline_sample/scripts/start_sample.sh 1,1 20 50 3v3version1 tensorflow norm_medium
 
 Please refer to 'start_sample.sh' and 'sample.sh' for details.
 
@@ -64,7 +64,7 @@ Please refer to 'start_sample.sh' and 'sample.sh' for details.
 
 ## **Train**
 
-    cd hok-offline/hok3v3
+    cd hok3v3
     python offline_train/train.py --root_path=offline_logs --replay_dir=datasets --dataset_name=norm_medium --run_prefix=run_indbc_0
 
 **Notations:**
@@ -74,7 +74,7 @@ Please refer to 'start_sample.sh' and 'sample.sh' for details.
 
 ## **Evaluate**
 
-    cd hok-offline/hok3v3
+    cd hok3v3
     python offline_eval/evaluation.py --root_path=offline_logs --run_prefix=run_indbc_0 --levels=1 --cpu_num=10 --eval_num=2 --final_test=0 --tensorflow_oppo=1 --max_steps=500000 --dataset_name=norm_medium
 
 **Notations:**

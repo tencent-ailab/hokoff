@@ -8,6 +8,7 @@ from baselinemodel.model_config import ModelConfig
 from baselinemodel.tensorflowmodel import Model as tfModel
 from baselinemodel.model import Model as thModel
 import torch
+import os
 from actor import Actor
 from agent import Agent
 from utils.ensure_path_exist import ensure_path_exist
@@ -28,13 +29,14 @@ flags.DEFINE_integer("eval_number", -1, "battle number for evaluation")
 flags.DEFINE_string("backend", "pytorch", "log path for offline information")
 flags.DEFINE_string("dataset_name", "tmplevel-0-0", "log path for offline information")
 AGENT_NUM = 2
+import time
 torch.set_num_threads(1)
 torch.set_num_interop_threads(1)
 # gamecore as lib
 def gc_as_lib(argv):
-    from hok.hok3v3.gamecore_client import GameCoreClient as Environment
-
     print('backend:', FLAGS.backend)
+    from hok.hok3v3.gamecore_client import GameCoreClient as Environment
+    
     agents = []
 
     eval_number = FLAGS.eval_number
@@ -82,7 +84,7 @@ def gc_as_lib(argv):
     )
 
     env = Environment(host=FLAGS.ai_server_ip, seed=FLAGS.actor_id, gc_server=FLAGS.gc_server_addr)
-
+    # env = None
     if 'gain_gold' in FLAGS.dataset_name:
         sub_task = 'gain_gold'
     else:

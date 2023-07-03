@@ -89,7 +89,7 @@ class Actor:
 
         self.env_agents = []
         for i, agent in enumerate(self.agents):
-            LOG.debug("reset agent {}".format(i))
+            LOG.info("reset agent {}".format(i))
             if isinstance(agent, list):
                 for j, sub_agent in enumerate(agent):
                     if load_models is None:
@@ -111,7 +111,7 @@ class Actor:
                 self.env_agents.append(agent)
 
         # restart a new game
-        LOG.debug("reset env")
+        LOG.info("reset env")
         camp_game_id, is_gameover = self.env.reset(self.env_agents, eval_mode=eval)
         first_time = True
         sub_task_gameover_frameno = 8000

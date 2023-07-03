@@ -14,7 +14,7 @@ DATASET_PATH="$ROOT_DIR/datasets/$DATASET_VERSION_NAME/$DATASET_NAME/"
 
 B0=`echo $BACKEND | awk -F, '{print $1}'`
 B1=`echo $BACKEND | awk -F, '{print $2}'`
-if [[ "$B1" == "" ]]; then
+if [ "$B1" = "" ]; then
     B1=$B0
 fi
 MODEL_PATH="$ROOT_DIR/baselines/$B0/level-$A0/code/actor/model/init,$ROOT_DIR/baselines/$B1/level-$A1/code/actor/model/init"
@@ -44,6 +44,7 @@ echo "monitor_server_addr: $monitor_server_addr"
 # MAX_EPISODE=${MAX_EPISODE-"-1"}
 let actor_num=$CPU_NUMBER-1
 cd $ROOT_DIR
+echo $ROOT_DIR
 while [ "1" == "1" ]
 do
 
