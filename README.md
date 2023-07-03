@@ -12,7 +12,7 @@ Here is the open-access code for our paper "HoK Offline: Investigating Solo and 
 
 Our framework is based on Honor of Kings environment, please install the [**hok environment and the gamecore**](https://github.com/tencent-ailab/hok_env) first.
 
-For running on Linux, based on the introductions in [**docs/run_windows_gamecore_on_linux.md**](https://github.com/tencent-ailab/hok_env/blob/master/docs/run_windows_gamecore_on_linux.md), you can make a gamecore docker image. Then by running the following example commands, you can start a gamecore server container for hok1v1 or hok3v3.
+For running on Linux, based on the introductions in [**hok_env/docs/run_windows_gamecore_on_linux.md**](https://github.com/tencent-ailab/hok_env/blob/master/docs/run_windows_gamecore_on_linux.md), you can make a gamecore docker image. Then by running the following example commands, you can start a gamecore server container for hok1v1 or hok3v3.
 
     # hok1v1 gamecore server container
     docker run --name gamecore1v1 -d --network host --restart=always -e SIMULATOR_USE_WINE=1 -e GAMECORE_SERVER_BIND_ADDR=":23333" gamecore:latest bash -c "bash /rl_framework/remote-gc-server/run_and_monitor_gamecore_server.sh"
