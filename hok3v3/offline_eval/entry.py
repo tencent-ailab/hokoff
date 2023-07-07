@@ -1,15 +1,10 @@
 import sys
-
-sys.path.append('.')
-# sys.path.append('./lib')
-
+from hok.hok3v3.gamecore_client import GameCoreClient as Environment
 from absl import app as absl_app
 from absl import flags
 import random
-
-
+sys.path.append('.')
 from baselinemodel.model_config import ModelConfig
-
 from baselinemodel.model import Model
 from baselinemodel.tensorflowmodel import Model as tfmodel
 import torch
@@ -51,9 +46,6 @@ import torch as th
 # gamecore as lib
 def gc_as_lib(argv):
     # TODO: used for different process
-
-    from hok.hok3v3.gamecore_client import GameCoreClient as Environment
-
     thread_id = 0
     actor_id = FLAGS.thread_num * FLAGS.i + thread_id
     agents = []

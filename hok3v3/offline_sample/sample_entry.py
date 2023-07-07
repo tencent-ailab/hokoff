@@ -1,14 +1,16 @@
 import sys
+from hok.hok3v3.gamecore_client import GameCoreClient as Environment
 
-sys.path.append('.')
 # sys.path.append('./lib')
 from absl import app as absl_app
 from absl import flags
+import torch
+import os
+sys.path.append('.')
 from baselinemodel.model_config import ModelConfig
 from baselinemodel.tensorflowmodel import Model as tfModel
 from baselinemodel.model import Model as thModel
-import torch
-import os
+
 from actor import Actor
 from agent import Agent
 from utils.ensure_path_exist import ensure_path_exist
@@ -35,7 +37,6 @@ torch.set_num_interop_threads(1)
 # gamecore as lib
 def gc_as_lib(argv):
     print('backend:', FLAGS.backend)
-    from hok.hok3v3.gamecore_client import GameCoreClient as Environment
     
     agents = []
 
