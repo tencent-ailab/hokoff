@@ -115,18 +115,26 @@ def gc_as_lib(argv):
     gc_mode = os.getenv("GC_MODE")
     if gc_mode == "local":
         remote_param = None
-    
+
+    print("load config.dat: ", FLAGS.config_path)
+    lib_processor = interface.Interface()
+    lib_processor.Init(FLAGS.config_path)
+
     game_launcher = Battle(
-        server_addr=FLAGS.gc_server_addr,
+        server_addr=gc_server_addr,
         gamecore_req_timeout=FLAGS.gamecore_req_timeout,
     )
+
+    addrs = []
+    for i in range(AGENT_NUM):
+        addrs.append("tcp://0.0.0.0:{}".format(35300 + actor_id * AGENT_NUM + i))
+
     env = HoK1v1(
         "actor-1v1-{}".format(actor_id),
-        gamecore_path=FLAGS.gamecore_path,
-        game_log_path=FLAGS.game_log_path,
-        eval_mode=False,
-        config_path="config.dat",
-        remote_param=remote_param,
+        game_launcher,
+        lib_processor,
+        addrs,
+        aiserver_ip=FLAGS.aiserver_ip,
     )
 
     if any(FLAGS.dataset_path):

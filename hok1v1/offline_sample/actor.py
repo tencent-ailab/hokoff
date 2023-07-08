@@ -157,7 +157,7 @@ class Actor:
         # use_common_ai=[True,True]
 
         while True:
-            _, r, d, state_dict = self.env.reset(env_config, use_common_ai=use_common_ai, eval=eval, render=render)
+            _, r, d, state_dict = self.env.reset(env_config, use_common_ai=use_common_ai, eval=eval)
             if state_dict[0]['frame_no'] <= 10:
                 break
             else:
@@ -275,7 +275,7 @@ class Actor:
                     episode_infos[i]["hurt_per_frame"] = hero_state.totalHurt / game_info["length"]
                     episode_infos[i]["hurtH_per_frame"] = hero_state.totalHurtToHero / game_info["length"]
                     episode_infos[i]["hurtBH_per_frame"] = hero_state.totalBeHurtByHero / game_info["length"]
-                    episode_infos[i]["hero_id"] = self.HERO_DICT[env_config[0]["hero"]]
+                    episode_infos[i]["hero_id"] = env_config['heroes'][i][0]['hero_id']
                     episode_infos[i]["totalHurtToHero"] = hero_state.totalHurtToHero
                     break
             if loss_camp == -1:
@@ -387,10 +387,19 @@ class Actor:
             hero_num1 = len(hero_data_list[1])
             hero_name1 = heroes0[camp1_index]  ### hero-from-camp1 vs hero-from-camp2 ###
             hero_name2 = heroes1[camp2_index]
-            config_dicts = [
-                {"hero": hero_name1, "skill": hero_data_list[0][hero_name1]},
-                {"hero": hero_name2, "skill": hero_data_list[1][hero_name2]},
-            ]
+            # config_dicts = [
+            #     {"hero": hero_name1, "skill": hero_data_list[0][hero_name1]},
+            #     {"hero": hero_name2, "skill": hero_data_list[1][hero_name2]},
+            # ]
+            from hok.hok1v1.camp import HERO_DICT
+            first_id, second_id = HERO_DICT[hero_name1], HERO_DICT[hero_name2]
+            config_dicts = {
+                "mode": "1v1",
+                "heroes": [
+                    [{"hero_id": first_id, "skill_id": 80115, "symbol": [1512, 1512]}],
+                    [{"hero_id": second_id, "skill_id": 80115, "symbol": [1512, 1512]}],
+                ],
+            }
 
             camp1_index += 1
             if camp1_index % hero_num0 == 0:  ### make all heros from two sides battle ###
@@ -414,8 +423,6 @@ class Actor:
 
                 swap = not swap
 
-                if self.env.render is not None:
-                    self.env.render.dump_one_round()
                 self._episode_num += 1
             except Exception as e:  # pylint: disable=broad-except
                 LOG.error(e)

@@ -16,6 +16,32 @@ from config.config import Config
 from utils.ensure_path_exist import ensure_path_exist
 from utils.log_win_rate import log_win_rate
 
+import hok.hok1v1.lib.interface as interface
+from hok.hok1v1.battle import Battle
+from hok.hok1v1.env1v1 import interface_default_config
+import os
+
+flags.DEFINE_string(
+    "config_path",
+    os.getenv("INTERFACE_CONFIG_PATH", interface_default_config),
+    "config file for interface",
+)
+flags.DEFINE_integer(
+    "gamecore_req_timeout",
+    30000,
+    "millisecond timeout for gamecore to wait reply from server",
+)
+flags.DEFINE_string(
+    "gc_server_addr",
+    os.getenv("GAMECORE_SERVER_ADDR", "127.0.0.1"),
+    "the gamecore server addr",
+)
+flags.DEFINE_string(
+    "aiserver_ip",
+    os.getenv("AI_SERVER_ADDR", "127.0.0.1"),
+    "the actor ip",
+)
+
 FLAGS = flags.FLAGS
 
 flags.DEFINE_integer("actor_id", 0, "actor id")
@@ -92,14 +118,28 @@ def gc_as_lib(argv):
     gc_mode = os.getenv("GC_MODE")
     if gc_mode == "local":
         remote_param = None
-    env = HoK1v1.load_game(
-        runtime_id=seed,
-        gamecore_path=FLAGS.gamecore_path,
-        game_log_path=FLAGS.game_log_path,
-        eval_mode=True,
-        config_path="config.dat",
-        remote_param=remote_param,
+    
+    print("load config.dat: ", FLAGS.config_path)
+    lib_processor = interface.Interface()
+    lib_processor.Init(FLAGS.config_path)
+
+    game_launcher = Battle(
+        server_addr=gc_server_addr,
+        gamecore_req_timeout=FLAGS.gamecore_req_timeout,
     )
+
+    addrs = []
+    for i in range(AGENT_NUM):
+        addrs.append("tcp://0.0.0.0:{}".format(35300 + actor_id * AGENT_NUM + i))
+
+    env = HoK1v1(
+        "actor-1v1-{}".format(actor_id),
+        game_launcher,
+        lib_processor,
+        addrs,
+        aiserver_ip=FLAGS.aiserver_ip,
+    )
+
     if any(FLAGS.dataset_path):
         dataset_path = [FLAGS.dataset_path[:-5] + "_" + str(i) + ".hdf5" for i in range(AGENT_NUM)]
         for path in dataset_path:
