@@ -396,8 +396,8 @@ class Actor:
             config_dicts = {
                 "mode": "1v1",
                 "heroes": [
-                    [{"hero_id": first_id, "skill_id": 80115 if hero_levels[camp1_index]>6 else 80110, "symbol": [1512, 1512]}],
-                    [{"hero_id": second_id, "skill_id": 80115 if hero_levels[camp2_index]>6 else 80110, "symbol": [1512, 1512]}],
+                    [{"hero_id": first_id, "skill_id": 80115 if int(hero_levels[camp1_index])>6 else 80110, "symbol": [1512, 1512]}],
+                    [{"hero_id": second_id, "skill_id": 80115 if int(hero_levels[camp2_index])>6 else 80110, "symbol": [1512, 1512]}],
                 ],
             }
 

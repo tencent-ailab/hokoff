@@ -26,7 +26,7 @@ ROOT_DIR=$(dirname $(dirname $(dirname $(readlink -f $0))))
 
 A0=`echo $LEVEL_STR | awk -F, '{print $1}'`
 A1=`echo $LEVEL_STR | awk -F, '{print $2}'`
-DATASET_PATH="/datasets/$DATASET_VERSION_NAME/$DATASET_NAME/"
+DATASET_PATH="$ROOT_DIR/datasets/$DATASET_VERSION_NAME/$DATASET_NAME/"
 MODEL_PATH="$ROOT_DIR/baselines/tensorflow/level-$A0/algorithms/checkpoint,$ROOT_DIR/baselines/tensorflow/level-$A1/algorithms/checkpoint"
 echo ${MODEL_PATH}
 
