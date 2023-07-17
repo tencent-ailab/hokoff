@@ -35,6 +35,7 @@ flags.DEFINE_boolean("use_lstm", 1, "if use_lstm")
 
 flags.DEFINE_string("agent_models", "", "agent_model_list")
 flags.DEFINE_string("dataset_path", "", "dataset save path")
+flags.DEFINE_string("levels", "1,1", "levels")
 
 flags.DEFINE_integer("eval_number", -1, "battle number for evaluation")
 
@@ -161,7 +162,7 @@ def gc_as_lib(argv):
         env_config_path = '{},{}'.format(
             load_models[0][: -len('algorithms/checkpoint')] + 'hero_config.json', load_models[1][: -len('algorithms/checkpoint')] + 'hero_config.json'
         )
-    offline_win_rate = actor.run(eval_mode=eval_mode, eval_number=eval_number, load_models=load_models, env_config_path=env_config_path)
+    offline_win_rate = actor.run(eval_mode=eval_mode, eval_number=eval_number, load_models=load_models, env_config_path=env_config_path,hero_levels=FLAGS.levels.split(','))
 
     print('Final Win Rate {}'.format(offline_win_rate))
 

@@ -172,7 +172,7 @@ def gc_as_lib(argv):
             load_models[1][: -len('algorithms/checkpoint')] + 'hero_config.json', load_models[1][: -len('algorithms/checkpoint')] + 'hero_config.json'
         )
 
-    offline_win_rate = actor.run(eval_mode=eval_mode, eval_number=eval_number, load_models=load_models, env_config_path=env_config_path)
+    offline_win_rate = actor.run(eval_mode=eval_mode, eval_number=eval_number, load_models=load_models, env_config_path=env_config_path,hero_levels=FLAGS.levels.split(','))
     log_win_rate(os.path.join(FLAGS.offline_log_path, FLAGS.run_prefix, 'win_rate_details'), actor_id, FLAGS.train_step, offline_win_rate)
 
 

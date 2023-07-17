@@ -346,7 +346,7 @@ class Actor:
 
         LOG.info("=" * 50)
 
-    def run(self, eval_mode=True, eval_number=-1, load_models=None, env_config_path=None):
+    def run(self, eval_mode=True, eval_number=-1, load_models=None, env_config_path=None, hero_levels='1,1'):
 
         self._last_print_time = time.time()
         self._episode_num = 0
@@ -396,8 +396,8 @@ class Actor:
             config_dicts = {
                 "mode": "1v1",
                 "heroes": [
-                    [{"hero_id": first_id, "skill_id": 80115, "symbol": [1512, 1512]}],
-                    [{"hero_id": second_id, "skill_id": 80115, "symbol": [1512, 1512]}],
+                    [{"hero_id": first_id, "skill_id": 80115 if hero_levels[camp1_index]>6 else 80110, "symbol": [1512, 1512]}],
+                    [{"hero_id": second_id, "skill_id": 80115 if hero_levels[camp2_index]>6 else 80110, "symbol": [1512, 1512]}],
                 ],
             }
 

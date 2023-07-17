@@ -71,6 +71,7 @@ do
                                 --eval_number=${EVAL_NUMBER} \
                                 --dataset_name=$DATASET_NAME \
                                 --game_log_path=$LOG_DIR/game_log \
+                                --levels=$LEVEL_STR \
                                 >> $actor_log 2>&1 &
                             #   --mem_pool_addr=$mem_pool_addr \
                             #   --model_pool_addr="localhost:10016" \
