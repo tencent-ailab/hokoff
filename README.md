@@ -3,7 +3,7 @@
 Here is the open-access code for our paper "HoK Offline: Investigating Solo and Team Dynamics in a Rich MOBA Dataset from Honor of Kings". Based on this code, you can realize the comprehensive process for offline RL and offline MARL based on Honor of Kings Arena (HoK Arena) and Honor of Kings Multi-Agent Arena (HoK MA2). The framework is demonstrated as follow:
 
 <div style="text-align:center">
-    <img src="./figure/framework.png" alt='framework' width='600px' >
+    <img src="./figure/finalframework.png" alt='framework' width='600px' >
 </div>
 
 ## **Installation**
