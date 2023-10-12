@@ -21,7 +21,7 @@ For running on Linux, following the introductions in [**hok_env/docs/run_windows
 
 ### **Multi-Level Models**
 
-The Multi-Level Models we presented in the paper can be download from the following link: [**for HoK Arena(1v1)**](https://kaiwu-assets-1258344700.cos.ap-shanghai.myqcloud.com/paper/hok-offline/1v1/1v1baselines.zip) and [**for HoK MA2(3v3)**](https://kaiwu-assets-1258344700.cos.ap-shanghai.myqcloud.com/paper/hok-offline/3v3/3v3baselines.zip). Please download these models and unzip them into folder **hok1v1** and folder **hok3v3** respectively. Here is the code example:
+The Multi-Level Models we presented in the paper can be download from the following link: [**for HoK1v1**](https://kaiwu-assets-1258344700.cos.ap-shanghai.myqcloud.com/paper/hok-offline/1v1/1v1baselines.zip) and [**for HoK3v3**](https://kaiwu-assets-1258344700.cos.ap-shanghai.myqcloud.com/paper/hok-offline/3v3/3v3baselines.zip). Please download these models and unzip them into folder **hok1v1** and folder **hok3v3** respectively. Here is the code example:
 
     # download multi-level models for HoK Arena
     cd hok1v1
