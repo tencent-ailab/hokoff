@@ -1,5 +1,5 @@
 # **HoK Offline**
-Here is the open-access code for NeurIPS2023 Datasets and Benchmarks accepted paper "Hokoff: Real Game Dataset from Honor of Kings and its Offline Reinforcement Learning Benchmarks". Based on this code, you can realize the comprehensive process for offline RL and offline MARL based on Honor of Kings Arena (HoK1v1) and Honor of Kings Multi-Agent Arena (HoK3v3). The framework is demonstrated as follow:
+Here is the open-access code for **NeurIPS2023 Datasets and Benchmarks accepted paper "Hokoff: Real Game Dataset from Honor of Kings and its Offline Reinforcement Learning Benchmarks"**. Based on this code, you can realize the comprehensive process for offline RL and offline MARL based on Honor of Kings Arena (HoK1v1) and Honor of Kings Multi-Agent Arena (HoK3v3). The framework is demonstrated as follow:
 
 <div style="text-align:center">
     <img src="./figure/finalframework.png" alt='framework' width='600px' >
