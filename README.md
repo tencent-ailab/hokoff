@@ -96,3 +96,14 @@ Please refer to 'start_sample.sh' and 'sample.sh' for details.
 ## **Acknowledgement**
 
 We gratefully acknowledge the support and contributions from Tencent TiMi Studio and Tencent AI Lab in our research. Portions of the code used in this work are adapted from the open-source code of [hok_env](https://github.com/tencent-ailab/hok_env). Specifically, we thank the developers  for making their code available for reuse. Without their efforts, our research would not have been possible. We sincerely appreciate their generosity and the impact they have on our work.
+
+## **Citation**
+If you use the code in this repository, please cite our paper as follows.
+```
+@inproceedings{qu2024hokoff,
+  title={Hokoff: Real Game Dataset from Honor of Kings and its Offline Reinforcement Learning Benchmarks},
+  author={Qu, Yun and Wang, Boyuan and Shao, Jianzhun and Jiang, Yuhang and Chen, Chen and Ye, Zhenbin and Liu, Linc and Yang, Junfeng and Lai, Lin and Qin, Hongyang and others},
+  booktitle={Thirty-seventh Conference on Neural Information Processing Systems Track on Datasets and Benchmarks},
+  year={2023}
+}
+```
