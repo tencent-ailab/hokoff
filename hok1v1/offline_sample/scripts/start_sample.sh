@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# export GC_MODE="local"
-export INTERFACE_SO_NOT_USE_CURVE=1
+# export INTERFACE_SO_NOT_USE_CURVE=1
 
 SCRIPT_DIR=$(dirname $(dirname $(readlink -f $0)))
 
@@ -49,7 +48,7 @@ mkdir -p $LOG_DIR ### recursive make dirs ###
 cd $SCRIPT_DIR/scripts; bash sample.sh $LEVEL_STR $EVAL_NUMBER $CPU_NUMBER $DATASET_VERSION_NAME $DATASET_NAME
 
 echo "start end!!!!"
-Max_test_time=$(($EVAL_NUMBER*420)) ### every game 7 minutes ###
+Max_test_time=$(($EVAL_NUMBER*1200)) ### every game 20 minutes ###
 if [ $max_test_time ];then
     Max_test_time=$max_test_time
 fi
@@ -68,12 +67,12 @@ do
             done_cpu=$(($done_cpu+1))
         fi
     done;
-    echo "Current done actor num: $done_cpu"
+    echo "Current done actor num: $done_cpu, time: $(( $(date +%s) - start_time ))"
     if [ "$done_cpu" == "$CPU_NUMBER" ]
     then
         echo "All actors are done."
         break
     else
-        sleep 6s
+        sleep 60s
     fi
 done
