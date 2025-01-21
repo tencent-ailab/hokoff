@@ -100,6 +100,20 @@ class Actor:
         self.sub_task_epsilon = 0.0
         self.sub_task_score = [604.157 * 3, 960.840 * 3]
 
+        ### 2025-01-21 skill name-->id ###
+        self.skill_id_dict = {
+            'sprint':80109,
+            'smite':80104,
+            'heal':80102,
+            'execute':80108,
+            'frenzy':80110,
+            'disrupt':80105,
+            'stun':80103,
+            'purify':80107,
+            'intimidate':80121,
+            'flash':80115
+        }
+
     def set_env(self, environment):
         self.env = environment
 
@@ -387,17 +401,20 @@ class Actor:
             hero_num1 = len(hero_data_list[1])
             hero_name1 = heroes0[camp1_index]  ### hero-from-camp1 vs hero-from-camp2 ###
             hero_name2 = heroes1[camp2_index]
-            # config_dicts = [
-            #     {"hero": hero_name1, "skill": hero_data_list[0][hero_name1]},
-            #     {"hero": hero_name2, "skill": hero_data_list[1][hero_name2]},
-            # ]
+            
+            ### 2025-01-21 get skill ###
+            hero_skill1 = list(hero_data_list[0].values())[camp1_index]
+            hero_skill2 = list(hero_data_list[1].values())[camp2_index] 
+
             from hok.hok1v1.camp import HERO_DICT
             first_id, second_id = HERO_DICT[hero_name1], HERO_DICT[hero_name2]
+            
+            ### 2025-01-21 add skill-key-value-dict ###
             config_dicts = {
                 "mode": "1v1",
                 "heroes": [
-                    [{"hero_id": first_id, "skill_id": 80115 if int(hero_levels[camp1_index])>6 else 80110, "symbol": [1512, 1512]}],
-                    [{"hero_id": second_id, "skill_id": 80115 if int(hero_levels[camp2_index])>6 else 80110, "symbol": [1512, 1512]}],
+                    [{"hero_id": first_id, "skill_id": self.skill_id_dict[hero_skill1], "symbol": [1512, 1512]}],
+                    [{"hero_id": second_id, "skill_id": self.skill_id_dict[hero_skill2], "symbol": [1512, 1512]}],
                 ],
             }
 
