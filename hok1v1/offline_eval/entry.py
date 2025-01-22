@@ -89,6 +89,9 @@ def gc_as_lib(argv):
     else:
         enemy_level = FLAGS.levels.split(',')[1]
         enemy_model = '../baselines/tensorflow/level-' + FLAGS.levels.split(',')[1] + '/algorithms/checkpoint'
+    
+    ### 2025-0121 use level to set env_config ###
+    our_side_baseline = '../baselines/tensorflow/level-' + FLAGS.levels.split(',')[0] + '/algorithms/checkpoint'
 
     load_models = [FLAGS.agent_models, enemy_model]
 
@@ -169,7 +172,7 @@ def gc_as_lib(argv):
         )
     else:
         env_config_path = '{},{}'.format(
-            load_models[0][: -len('algorithms/checkpoint')] + 'hero_config.json', load_models[1][: -len('algorithms/checkpoint')] + 'hero_config.json'
+            our_side_baseline[: -len('algorithms/checkpoint')] + 'hero_config.json', load_models[1][: -len('algorithms/checkpoint')] + 'hero_config.json'
         )
 
     offline_win_rate = actor.run(eval_mode=eval_mode, eval_number=eval_number, load_models=load_models, env_config_path=env_config_path,hero_levels=FLAGS.levels.split(','))
